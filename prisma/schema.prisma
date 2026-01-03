@@ -1,0 +1,48 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly//prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {  
+  id  Int @default(autoincrement()) @id
+  email String @unique
+  name String?
+  passwors String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  questions Questions[]
+  answears Answers[]
+}
+
+model Questions {  
+  id  Int @default(autoincrement()) @id
+  title String
+  boddy String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId Int
+  user  User @relation(fields: [userId], references: [id])
+  answears Answers[]
+}
+
+model Answers {  
+  id  Int @default(autoincrement()) @id
+  title String
+  boddy String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId Int
+  questionId Int
+  user User @relation(fields: [userId], references: [id])
+  question  Questions @relation(fields: [questionId], references: [id])
+}
